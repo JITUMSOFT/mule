@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry including="**/*.java" kind="src" path="src/main/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="C:/Software/workspace/Oauth1/src/main/resources/lib/signpostcustom-1.0.0-RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/Software/workspace/Oauth1/src/main/resources/lib/okhttp-3.5.0.jar"/>
+	<classpathentry kind="lib" path="C:/Software/workspace/Oauth1/src/main/resources/lib/okio-1.11.0.jar"/>
+	<classpathentry kind="lib" path="C:/Software/workspace/Oauth1/src/main/resources/lib/tape-1.2.2.jar"/>
+	<classpathentry kind="lib" path="C:/Software/workspace/Oauth1/src/main/resources/lib/httpclient-4.5.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
