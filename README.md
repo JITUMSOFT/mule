@@ -1,2 +1,2 @@
-# mulehelp
-Repository to store all out of box solutions worked till date.
+# mulehelper
+Repository to share out of box solutions applied in MuleESB.
