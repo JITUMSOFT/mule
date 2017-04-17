@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:json="http://www.mulesoft.org/schema/mule/json"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd">
+    <file:connector name="WriteFileToTarget" writeToDirectory="#[flowVars.FileTargetPath]" autoDelete="false" streaming="true" validateConnections="true" doc:name="File"/>
+    <flow name="filetestharnessFlow">
+        <http:listener config-ref="GlobalHTTP-API-RequestListener" path="/filetestharness" doc:name="HTTP" allowedMethods="POST"/>
+        <flow-ref name="filetestharnessSub_Flow" doc:name="filetestharnessSub_Flow"/>
+        <set-payload value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+  &lt;Response&gt;
+      &lt;FileWritten&gt;true&lt;/FileWritten&gt;
+  &lt;/Response&gt;
+" mimeType="application/xml" doc:name="Set Success Payload"/>
+        <set-property propertyName="http.status" value="200" doc:name="Set HTTP status"/>
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <set-payload value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+  &lt;Response&gt;
+      &lt;FileWritten&gt;false&lt;/FileWritten&gt;
+      &lt;Reason&gt;#[payload]&lt;/Reason&gt;
+  &lt;/Response&gt;
+" mimeType="application/xml" doc:name="Payload"/>
+            <set-property propertyName="http.status" value="400" doc:name="Set HTTP status"/>
+        </catch-exception-strategy>
+    </flow>
+    <sub-flow name="filetestharnessSub_Flow">
+        <mulexml:dom-to-xml-transformer doc:name="DOM to XML"/>
+        <set-payload value="#[payload]" doc:name="Set XML Payload"/>
+        <set-variable variableName="FileSourcePath" value="#[xpath3('//File/FileConfig/FileSourcePath')]" doc:name="SetFileSourcePath"/>
+        <set-variable variableName="FileTargetPath" value="#[xpath3('//File/FileConfig/FileTargetPath')]" doc:name="SetFileTargetPath"/>
+        <set-variable variableName="FileNames" value="#[xpath3('//File/FileConfig/FileNames')]" doc:name="SetFileNames"/>
+        <component class="filetestharness.FileProcessing" doc:name="FileNamesToList"/>
+        <!-- <file:outbound-endpoint path="#[flowVars.FileSourcePath]" outputPattern="#[flowVars.FileName]" connector-ref="WriteFileToTarget" responseTimeout="10000" doc:name="File"/> -->
+       
+    </sub-flow>
+</mule>
