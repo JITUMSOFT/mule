@@ -1,2 +1,2 @@
 # mulehelper
-Repository to share out of box solutions applied in MuleESB.
+Repository to share out of box solutions applied using MuleESB.
