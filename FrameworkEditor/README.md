@@ -1,1 +1,1 @@
-An attempt to build lightwight framework (Spring, Mule) framework.
+An attempt to build lightweight framework (Spring, Mule) framework.
