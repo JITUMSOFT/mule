@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+ function readBox(value){
+	 if (value=="blank"){
+		 document.getElementById("comment").value='';
+	 }
+	 var filePath= ("http://localhost:8081/FrameworkEditor/") + value + (".xml");
+	 $( "#comment" ).load(filePath);
+ 
+ }
+  </script>
+  
+  <script>
+    $(document).ready(function(){
+    document.getElementById("text1").value = localStorage.getItem("comment");
+        });
+
+   $(window).on('beforeunload', function() {
+    localStorage.setItem("item1",document.getElementById("comment").value);
+  });
+</script>
+
+<script>
+
+function copySelectionText(){
+    var copysuccess // var to check whether execCommand successfully executed
+    try{
+        copysuccess = document.execCommand("copy") // run command to copy selected text to clipboard
+    } catch(e){
+        copysuccess = false
+    }
+    return copysuccess
+}
+</script>
+ 
+</head>
+<body>
+  
+<div class="container">
+  <h1><small>Framework Editor</small></h1>
+  <div class="row">
+  <div class="col-sm-4">
+  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">ReadMe</button>
+  <div id="demo" class="collapse">
+   This editor would compile xml framework based config files in standalone manner. 
+  </div></div>
+  <div class="col-sm-8">
+  <button type="button" class="btn btn-info" onclick="copySelectionText();">CopyToClipBoard</button>
+  </div>
+  </div>
+
+  
+  <p></p>
+  <form action="HandleConfig" method="POST" onsubmit="saveComment(); ">
+  <label>ChooseFramework</label>
+  <select id="selectMe" onchange="readBox(this.value)">
+   <option value="blank"></option>
+    <option value="mule">mule</option>
+    <option value="spring">spring</option>
+</select>
+
+<br><br>
+    <label for="comment">Untitled File:</label>
+  <textarea class="form-control" rows="25" id="comment" name="comment"></textarea>
+  <br><br>
+    <button type="submit" value="submit">Validate</button>
+    
+  </form>
+ 
+    
+</div>
+</body>
+</html>
